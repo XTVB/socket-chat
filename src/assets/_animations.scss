@@ -1,0 +1,45 @@
+.shake {
+  animation-name: shake;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+@keyframes shake {
+  from, to {
+    transform: translate(-50%, -50%);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    transform: translate(-51%, -50%);
+  }
+
+  20%, 40%, 60%, 80% {
+    transform: translate(-49%, -50%);
+  }
+}
+
+.slideAwayLeft-enter-active, .slideAwayLeft-leave-active,
+.slideAwayRight-enter-active, .slideAwayRight-leave-active {
+  transition: 1s;
+}
+
+.slideAwayLeft-enter {
+  left: 0!important;
+  transform: translate(-100%, -50%)!important;
+}
+
+.slideAwayRight-enter {
+  left: 100%!important;
+  transform: translate(0, -50%)!important;
+}
+
+.slideAwayLeft-leave-to {
+  left: 0!important;
+  transform: translate(-100%, -50%)!important;
+}
+
+.slideAwayRight-leave-to {
+  left: 100%!important;
+  transform: translate(0, -50%)!important;
+}
+

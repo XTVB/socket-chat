@@ -1,0 +1,50 @@
+<template>
+    <div id="topBar">
+        <img alt="Vue logo" src="../assets/logo.png">
+        <LogoutDropdown v-show="showDropdown" class="farRight"
+                        v-bind:userName="userName"
+        ></LogoutDropdown>
+    </div>
+</template>
+
+
+<script lang="ts">
+    import Vue from 'vue';
+    import LogoutDropdown from './LogoutDropdown.vue';
+
+    export default Vue.extend({
+        name: 'TopBar',
+        components: {
+            LogoutDropdown,
+        },
+        props: {
+            showDropdown: Boolean,
+            userName: String,
+        },
+    });
+
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped>
+    @import "../assets/vars";
+
+    #topBar {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        border-bottom: 0.5px solid $socketChatGreen;
+        background-color: white;
+        box-shadow: 0 0 3px 2px rgba($socketChatDarkGrey, 0.8);
+
+        img {
+            height: 40px;
+            padding: 5px;
+        }
+        
+        .farRight {
+            float: right;
+        }
+    }
+
+</style>
