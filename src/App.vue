@@ -7,7 +7,6 @@
         <transition name="slideAwayLeft">
             <LoginDialog
                     v-show="!loggedIn"
-                    v-on:setLoggedIn="loggedIn = $event"
                     class="loginDialog floatingPanel"
             ></LoginDialog>
         </transition>
@@ -34,14 +33,6 @@ export default Vue.extend({
         LoginDialog,
         ChatPanel,
     },
-    created() {
-        document.title = 'Socket Chat';
-    },
-    data() {
-        return {
-            userName: 'test',
-        };
-    },
     computed: {
         loggedIn() {
             return this.$store.state.loggedIn;
@@ -49,6 +40,9 @@ export default Vue.extend({
         messages() {
             return this.$store.state.messages;
         },
+        userName() {
+            return this.$store.state.username;
+        }
     },
 });
 </script>
@@ -74,10 +68,23 @@ export default Vue.extend({
             .loginDialog{
                 width: 400px;
                 height: 300px;
+
+                @media #{$mobile} {
+                    width: 100%;
+                    // The top bar is 50px so need to take that into account
+                    height: calc(100% - 50px);
+                }
             }
             .chatPanel {
-                width: 500px;
-                height: calc(80% - 50px);
+                width: 70%;
+                // The top bar is 50px so need to take that into account
+                height: calc(90% - 50px);
+
+                @media #{$mobile} {
+                    width: 100%;
+                    // The top bar is 50px so need to take that into account
+                    height: calc(100% - 50px);
+                }
             }
 
             .floatingPanel {
@@ -90,6 +97,12 @@ export default Vue.extend({
                 border: $socketChatDarkGreen solid 0.5px;
                 box-shadow: 0 0 3px 2px rgba($socketChatDarkGrey, 0.8);
                 background-color: white;
+
+                @media #{$mobile} {
+                    border: unset;
+                    border-radius: unset;
+                    box-shadow: unset;
+                }
             }
         }
     }

@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {dispatchDoLogin} from '@/store';
+import {commitSetUsername, dispatchDoLogin} from '@/store';
 
 export default Vue.extend({
     name: 'LoginDialog',
@@ -33,22 +33,22 @@ export default Vue.extend({
         attemptLogin(event: Event) {
             event.preventDefault();
             // TODO uncomment when not developing
-            // if (this.userInput === 'TestUser' && this.passwordInput === 'test') {
-            this.invalidLogin = false;
-            dispatchDoLogin(this.$store);
-                // this.$emit('setUserName', this.userInput);
-            this.userInput = '';
-            this.passwordInput = '';
-            // } else {
-            //     this.invalidLogin = true;
-            //     const self = this;
-            //     self.shake = true;
-            //     // Clear the class after 1 second (when the animation has completed) so that the dialog
-            //     // gets shook again next time an invalid login is attempted
-            //     setTimeout(() => {
-            //         self.shake = false;
-            //     }, 1000);
-            // }
+            if (this.userInput === 'TestUser' && this.passwordInput === 'test') {
+                this.invalidLogin = false;
+                dispatchDoLogin(this.$store);
+                commitSetUsername(this.$store, this.userInput);
+                this.userInput = '';
+                this.passwordInput = '';
+            } else {
+                this.invalidLogin = true;
+                const self = this;
+                self.shake = true;
+                // Clear the class after 1 second (when the animation has completed) so that the dialog
+                // gets shook again next time an invalid login is attempted
+                setTimeout(() => {
+                    self.shake = false;
+                }, 1000);
+            }
         },
     },
 });
@@ -92,6 +92,12 @@ export default Vue.extend({
             color: $socketChatDarkRed;
             font-size: 12px;
             margin-bottom: 10px;
+        }
+
+        button {
+            border: 1px solid $socketChatDarkBlue;
+            background-color: white;
+            border-radius: 10px;
         }
     }
 

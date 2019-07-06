@@ -3,8 +3,9 @@ import * as Vuex from 'vuex';
 import ChatMessageData from '@/tsclasses/ChatMessageData';
 import {getStoreAccessors} from 'vuex-typescript';
 
-interface State {
+export declare interface State {
     loggedIn: boolean;
+    username: string;
     messages: ChatMessageData[];
 }
 
@@ -15,7 +16,9 @@ Vue.use(Vuex);
 const storeOptions = {
     state: {
         // TODO init as false
-        loggedIn: true,
+        loggedIn: false,
+        // TODO init as ''
+        username: 'test',
         messages: Array<ChatMessageData>(),
     },
     mutations: {
@@ -24,6 +27,9 @@ const storeOptions = {
         },
         newMessage(state: State, message: ChatMessageData) {
             state.messages.push(message);
+        },
+        setUsername(state: State, value: string) {
+            state.username = value;
         },
     },
     actions: {
@@ -38,7 +44,7 @@ const storeOptions = {
         socket_command(context: Context, message: CommandSocketEvent) {
             console.log(message);
         },
-        do_login(context: Context): void {
+        do_login(context: Context) {
             context.state.messages = [];
             commitSetLogin(context, true);
             const newMessage = new ChatMessageData('Socket Chat', new Date(),
@@ -55,11 +61,14 @@ const { commit, read, dispatch } =
     getStoreAccessors<State, State>('');
 
 
-const actions = storeOptions.actions;
+export const defaultState = storeOptions.state;
+
+export const actions = storeOptions.actions;
 
 export const dispatchDoLogin = dispatch(actions.do_login);
 
-const mutations = storeOptions.mutations;
+export const mutations = storeOptions.mutations;
 
 export const commitSetLogin = commit(mutations.setLoggedIn);
 export const commitNewMessage = commit(mutations.newMessage);
+export const commitSetUsername = commit(mutations.setUsername);

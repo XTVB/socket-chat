@@ -30,6 +30,7 @@
     @import "../assets/scss/vars";
 
     #topBar {
+        z-index: 1;
         position: relative;
         width: 100%;
         height: 50px;
@@ -44,6 +45,10 @@
         
         .farRight {
             float: right;
+        }
+
+        @media #{$mobile} {
+            box-shadow: unset;
         }
     }
 
