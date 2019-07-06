@@ -1,32 +1,12 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import store from './store';
 import App from './App.vue';
 import VueSocketio from 'vue-socket.io-extended';
 import io from 'socket.io-client';
 
-Vue.config.productionTip = false;
+Vue.use(VueSocketio, io('https://demo-chat-server.on.ag/'), {store});
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
-    state: {},
-});
-
-Vue.use(VueSocketio, io('https://demo-chat-server.on.ag/'));
-
-const app = new Vue({
+new Vue({
     store,
     render: (h) => h(App),
 }).$mount('#app');
-
-
-
-
-// TODO remove - for debugging
-interface Window {
-    app: Vue;
-}
-
-declare var window: Window;
-
-window.app = app;

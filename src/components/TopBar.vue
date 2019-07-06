@@ -1,21 +1,21 @@
 <template>
     <div id="topBar">
-        <img alt="Vue logo" src="../assets/logo.png">
-        <LogoutDropdown v-show="showDropdown" class="farRight"
+        <img alt="Vue logo" src="../assets/images/logo.png">
+        <LogoutBar v-show="showDropdown" class="farRight"
                         v-bind:userName="userName"
-        ></LogoutDropdown>
+        ></LogoutBar>
     </div>
 </template>
 
 
 <script lang="ts">
     import Vue from 'vue';
-    import LogoutDropdown from './LogoutDropdown.vue';
+    import LogoutBar from './LogoutBar.vue';
 
     export default Vue.extend({
         name: 'TopBar',
         components: {
-            LogoutDropdown,
+            LogoutBar,
         },
         props: {
             showDropdown: Boolean,
@@ -27,13 +27,13 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-    @import "../assets/vars";
+    @import "../assets/scss/vars";
 
     #topBar {
         position: relative;
         width: 100%;
         height: 50px;
-        border-bottom: 0.5px solid $socketChatGreen;
+        border-bottom: 0.5px solid $socketChatDarkGreen;
         background-color: white;
         box-shadow: 0 0 3px 2px rgba($socketChatDarkGrey, 0.8);
 

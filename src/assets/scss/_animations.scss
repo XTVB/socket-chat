@@ -6,15 +6,15 @@
 
 @keyframes shake {
   from, to {
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, calc(-50% - 25px));
   }
 
   10%, 30%, 50%, 70%, 90% {
-    transform: translate(-51%, -50%);
+    transform: translate(-51%, calc(-50% - 25px));
   }
 
   20%, 40%, 60%, 80% {
-    transform: translate(-49%, -50%);
+    transform: translate(-49%, calc(-50% - 25px));
   }
 }
 
@@ -25,21 +25,21 @@
 
 .slideAwayLeft-enter {
   left: 0!important;
-  transform: translate(-100%, -50%)!important;
+  transform: translate(-100%, calc(-50% - 25px))!important;
 }
 
 .slideAwayRight-enter {
   left: 100%!important;
-  transform: translate(0, -50%)!important;
+  transform: translate(0, calc(-50% - 25px))!important;
 }
 
 .slideAwayLeft-leave-to {
   left: 0!important;
-  transform: translate(-100%, -50%)!important;
+  transform: translate(-100%, calc(-50% - 25px))!important;
 }
 
 .slideAwayRight-leave-to {
   left: 100%!important;
-  transform: translate(0, -50%)!important;
+  transform: translate(0, calc(-50% - 25px))!important;
 }
 

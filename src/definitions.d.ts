@@ -1,24 +1,14 @@
-// Definitions for custom objects
-
-//Event of type "message" emitted through socket.io
-interface SocketMessage {
+// Event of type "message" emitted through socket.io
+interface MessageSocketEvent {
     author: string;
     message: string;
 }
 
-//Event of type "command" emitted through socket.io
-interface SocketCommand {
+// Event of type "command" emitted through socket.io
+interface CommandSocketEvent {
     author: string;
     command: {
         type: string;
         data: any;
     };
-}
-
-//Message displayed to the user in the ChatPanel
-interface ChatMessage {
-    author: string;
-    sentTime: string;
-    messageContent: string;
-    isLocal: boolean;
 }
