@@ -25,8 +25,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import ChatMessage from '@/components/ChatMessage.vue';
-import ChatMessageData from '@/tsclasses/ChatMessageData';
-import {commitNewMessage} from '@/store';
+import {commitNewChat} from '@/store';
+import MessageChatDetails from '@/tsclasses/MessageChatDetails';
 
 export default Vue.extend({
     name: 'ChatPanel',
@@ -64,8 +64,8 @@ export default Vue.extend({
             }
 
             const user = this.userName;
-            const newMessage = new ChatMessageData(user, new Date(), content, true);
-            commitNewMessage(this.$store, newMessage);
+            const newChat = new MessageChatDetails(user, new Date(), true, content);
+            commitNewChat(this.$store, newChat);
             // $socket is socket.io-client instance
             this.$socket.emit('message', {author: user, message: content});
         },
@@ -73,16 +73,16 @@ export default Vue.extend({
             // Ignore the '/' which is the first character of the string
             switch (option.slice(1)) {
                 case 'help':
-                    commitNewMessage(this.$store, new ChatMessageData('Socket Chat', new Date(),
+                    commitNewChat(this.$store, new MessageChatDetails('Socket Chat', new Date(), false,
                         '/help - Get list of available options\n' +
-                        '/command - Request a new "command" type event from the socket', false));
+                        '/command - Request a new "command" type event from the socket'));
                     break;
                 case 'command':
                     this.requestCommandSocketEvent();
                     break;
                 default:
-                    commitNewMessage(this.$store, new ChatMessageData('Socket Chat', new Date(),
-                        'Chat command not recognised, type /help for list of commands', false));
+                    commitNewChat(this.$store, new MessageChatDetails('Socket Chat', new Date(), false,
+                        'Chat command not recognised, type /help for list of commands'));
                     break;
             }
         },

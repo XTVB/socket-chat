@@ -42,14 +42,13 @@ export default Vue.extend({
         },
         userName() {
             return this.$store.state.username;
-        }
+        },
     },
 });
 </script>
 
 <style lang="scss">
     @import "assets/scss/vars";
-    @import "assets/scss/mixins";
     @import "assets/scss/fonts";
     @import "assets/scss/animations";
 

@@ -4,7 +4,13 @@
             <div class="messageDetails">
                 {{message.author}} : {{message.sentTime}}
             </div>
-            <div class="messageContent">
+            <div v-if="isCommand(message)">
+                <component v-bind:is="commandType"
+                           v-bind:data="message.data"
+                ></component>
+                <span>{{message.type}}</span>
+            </div>
+            <div v-else class="messageContent">
                 <span>{{message.messageContent}}</span>
             </div>
         </div>
@@ -13,15 +19,46 @@
 
 
 <script lang="ts">
-    import Vue from 'vue';
+import Vue from 'vue';
+import BaseChatDetails from '@/tsclasses/BaseChatDetails';
+import CommandChatDetails from '@/tsclasses/CommandChatDetails';
+import {CommandEventType} from '@/tsclasses/SocketChat';
+import CompleteWidget from '@/components/widgets/CompleteWidget.vue';
+import DateWidget from '@/components/widgets/DateWidget.vue';
+import MapWidget from '@/components/widgets/MapWidget.vue';
+import RateWidget from '@/components/widgets/RateWidget.vue';
 
-    export default Vue.extend({
-        name: 'ChatMessage',
-        props: {
-            message: Object,
+export default Vue.extend({
+    name: 'ChatMessage',
+    components: {
+        CompleteWidget,
+        DateWidget,
+        MapWidget,
+        RateWidget,
+    },
+    props: {
+        message: BaseChatDetails,
+    },
+    computed: {
+        commandType() {
+            switch ((this.message as CommandChatDetails).type) {
+                case CommandEventType.DATE:
+                    return 'DateWidget';
+                case CommandEventType.MAP:
+                    return 'MapWidget';
+                case CommandEventType.RATE:
+                    return 'RateWidget';
+                case CommandEventType.COMPLETE:
+                    return 'CompleteWidget';
+            }
         },
-    });
-
+    },
+    methods: {
+        isCommand(details: BaseChatDetails): details is CommandChatDetails {
+            return details instanceof CommandChatDetails;
+        },
+    },
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

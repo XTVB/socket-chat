@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {commitSetUsername, dispatchDoLogin} from '@/store';
+import {commitSetUsername, dispatchAttemptLogin} from '@/store';
 
 export default Vue.extend({
     name: 'LoginDialog',
@@ -29,17 +29,18 @@ export default Vue.extend({
         };
     },
     methods: {
-        // Dummy Login, in an actual application this would send the inputs to the server to verify
         attemptLogin(event: Event) {
             event.preventDefault();
-            // TODO uncomment when not developing
-            if (this.userInput === 'TestUser' && this.passwordInput === 'test') {
+            dispatchAttemptLogin(this.$store, {
+                username: this.userInput,
+                password: this.passwordInput,
+            }).then(() => {
+                // If successful clear inputs for future attempts
                 this.invalidLogin = false;
-                dispatchDoLogin(this.$store);
-                commitSetUsername(this.$store, this.userInput);
                 this.userInput = '';
                 this.passwordInput = '';
-            } else {
+            }).catch(() => {
+                // If unsuccessful show error message and apply animation
                 this.invalidLogin = true;
                 const self = this;
                 self.shake = true;
@@ -48,7 +49,7 @@ export default Vue.extend({
                 setTimeout(() => {
                     self.shake = false;
                 }, 1000);
-            }
+            });
         },
     },
 });
@@ -56,7 +57,6 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-    @import "../assets/scss/mixins";
     @import "../assets/scss/vars";
 
     .loginContainer {

@@ -1,3 +1,5 @@
 @charset "UTF-8";
+@import "mixins";
+
 @include font-face("Lexia", "./assets/fonts/lexiaregular", null, null, eot eotie ttf);
 @include font-face("Lexia Bold", "./assets/fonts/lexiabold", null, null, eot eotie ttf);

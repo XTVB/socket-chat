@@ -1,16 +1,14 @@
 import uuidv4 from 'uuid/v4';
 
-export default class ChatMessageData {
+export default class BaseChatDetails {
     public uuid: string;
     public author: string;
     public sentTime: string;
-    public messageContent: string;
     public isLocal: boolean;
 
-    constructor(author: string, sentTime: Date, messageContent: string, isLocal: boolean) {
+    constructor(author: string, sentTime: Date, isLocal: boolean) {
         this.uuid = uuidv4();
         this.author = author;
-        this.messageContent = messageContent;
         this.isLocal = isLocal;
 
         let hours: string = sentTime.getHours().toString();
