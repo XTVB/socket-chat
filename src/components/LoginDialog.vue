@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:class="[shake ? 'shake' : '']">
+    <div v-bind:class="[shake && invalidLogin ? 'shake' : '']">
         <div class="loginContainer">
             <h2>Login</h2>
             <br>
@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {commitSetUsername, dispatchAttemptLogin} from '@/store';
+import {dispatchAttemptLogin} from '@/store';
 
 export default Vue.extend({
     name: 'LoginDialog',

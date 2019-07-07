@@ -128,18 +128,18 @@ const storeOptions = {
 
         },
         async attempt_login(context: Context, login: LoginCredentials): Promise<void> {
-            commitResetChat(context);
             const username = login.username;
             const password = login.password;
 
             // Dummy server API call to authenticate credentials
             await new Promise((resolve, reject) => {
                 if (username === 'TestUser' && password === 'test') {
-                    commitSetLogin(context, true);
-                    commitSetUsername(context, username);
+                    commitResetChat(context);
                     const newChat = new MessageChatDetails('Socket Chat', new Date(),
                         false, 'Welcome to Socket Chat. Type /help for options');
                     commitNewChat(context, newChat);
+                    commitSetUsername(context, username);
+                    commitSetLogin(context, true);
                     resolve();
                 } else {
                     reject('Invalid credentials');
