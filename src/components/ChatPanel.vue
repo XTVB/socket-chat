@@ -25,8 +25,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import ChatMessage from '@/components/ChatMessage.vue';
-import {commitNewChat} from '@/store';
+import {commitNewChat, dispatchSendEvent} from '@/store';
 import MessageChatDetails from '@/tsclasses/MessageChatDetails';
+import CommandChatDetails from '@/tsclasses/CommandChatDetails';
 
 export default Vue.extend({
     name: 'ChatPanel',
@@ -65,9 +66,7 @@ export default Vue.extend({
 
             const user = this.userName;
             const newChat = new MessageChatDetails(user, new Date(), true, content);
-            commitNewChat(this.$store, newChat);
-            // $socket is socket.io-client instance
-            this.$socket.emit('message', {author: user, message: content});
+            dispatchSendEvent(this.$store, newChat);
         },
         processChatOption(option: string) {
             // Ignore the '/' which is the first character of the string
@@ -87,8 +86,8 @@ export default Vue.extend({
             }
         },
         requestCommandSocketEvent() {
-            // $socket is socket.io-client instance
-            this.$socket.emit('command');
+            // CommandChatDetails can be null because the payload is ignored in emitted command events
+            dispatchSendEvent(this.$store, new CommandChatDetails('', new Date(), true, null));
         },
 
     },

@@ -47,5 +47,4 @@ export default Vue.extend({
             width: calc(100vw - 70px);
         }
     }
-
 </style>

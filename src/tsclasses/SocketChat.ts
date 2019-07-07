@@ -12,15 +12,6 @@ export enum CommandEventType {
     COMPLETE = 'complete',
 }
 
-export enum DateResponse {
-    MONDAY = 'Monday',
-    TUESDAY = 'Tuesday',
-    WEDNESDAY = 'Wednesday',
-    THURSDAY = 'Thursday',
-    FRIDAY = 'Friday',
-    UNSET = '',
-}
-
 // Data object for commands of MAP CommandEventType
 export interface LatLang {
     lat: number;

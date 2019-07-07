@@ -8,7 +8,6 @@
                 <component v-bind:is="commandType"
                            v-bind:data="message.data"
                 ></component>
-                <span>{{message.type}}</span>
             </div>
             <div v-else class="messageContent">
                 <span>{{message.messageContent}}</span>

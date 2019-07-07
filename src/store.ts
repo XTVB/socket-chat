@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import * as Vuex from 'vuex';
+import vm from '@/main';
 import {getStoreAccessors} from 'vuex-typescript';
 import BaseChatDetails from '@/tsclasses/BaseChatDetails';
 import MessageChatDetails from '@/tsclasses/MessageChatDetails';
@@ -7,7 +8,6 @@ import CommandChatDetails from '@/tsclasses/CommandChatDetails';
 import {
     CommandEventType,
     CommandSocketEvent,
-    DateResponse,
     LatLang,
     LoginCredentials,
     MessageSocketEvent,
@@ -17,7 +17,7 @@ export declare interface State {
     loggedIn: boolean;
     username: string;
     messages: BaseChatDetails[];
-    dateResponse: DateResponse | null;
+    dateResponse: string | null;
     mapResponse: LatLang | null;
     rateResponse: number | null;
     completeResponse: string | null;
@@ -49,13 +49,21 @@ const storeOptions = {
         setUsername(state: State, value: string) {
             state.username = value;
         },
+        setDateResponse(state: State, value: string) {
+            state.dateResponse = value;
+        },
+        setCompleteResponse(state: State, value: string) {
+            state.completeResponse = value;
+        },
+        setRateResponse(state: State, value: number) {
+            state.rateResponse = value;
+        },
         resetChat(state: State) {
             state.messages = [];
             state.dateResponse = null;
             state.mapResponse = null;
             state.rateResponse = null;
             state.completeResponse = null;
-
         },
     },
     actions: {
@@ -73,7 +81,7 @@ const storeOptions = {
             switch (commandSocketEvent.command.type) {
                 case CommandEventType.DATE:
                     if (context.state.dateResponse === null) {
-                        context.state.dateResponse = DateResponse.UNSET;
+                        context.state.dateResponse = '';
                         commitNewChat(context, newChat);
                     } else {
                         console.log('Command type already received');
@@ -106,6 +114,19 @@ const storeOptions = {
             }
 
         },
+        send_event(context: Context, event: BaseChatDetails): void {
+            const socket = vm.$socket;
+            if (event instanceof CommandChatDetails) {
+                socket.emit('command');
+            } else {
+                commitNewChat(context, event);
+                socket.emit('message', {
+                    author: context.state.username,
+                    message: (event as MessageChatDetails).messageContent,
+                });
+            }
+
+        },
         async attempt_login(context: Context, login: LoginCredentials): Promise<void> {
             commitResetChat(context);
             const username = login.username;
@@ -127,13 +148,31 @@ const storeOptions = {
 
 
         },
+        set_date_response(context: Context, value: string): void {
+            commitSetDateResponse(context, value);
+            const newChat = new MessageChatDetails(context.state.username, new Date(), true,
+                value);
+            dispatchSendEvent(context, newChat);
+        },
+        set_complete_response(context: Context, value: string): void {
+            commitSetCompleteResponse(context, value);
+            const newChat = new MessageChatDetails(context.state.username, new Date(), true,
+                value);
+            dispatchSendEvent(context, newChat);
+        },
+        set_rate_response(context: Context, value: number): void {
+            commitSetRateResponse(context, value);
+            const newChat = new MessageChatDetails(context.state.username, new Date(), true,
+                value.toString());
+            dispatchSendEvent(context, newChat);
+        },
     },
 };
 
 export default new Vuex.Store<State>(storeOptions);
 
 
-const { commit, read, dispatch } =
+const {commit, read, dispatch} =
     getStoreAccessors<State, State>('');
 
 
@@ -142,10 +181,17 @@ export const defaultState = storeOptions.state;
 export const actions = storeOptions.actions;
 
 export const dispatchAttemptLogin = dispatch(actions.attempt_login);
+export const dispatchSendEvent = dispatch(actions.send_event);
+export const dispatchSetDateResponse = dispatch(actions.set_date_response);
+export const dispatchSetCompleteResponse = dispatch(actions.set_complete_response);
+export const dispatchSetRateResponse = dispatch(actions.set_rate_response);
 
 export const mutations = storeOptions.mutations;
 
 export const commitSetLogin = commit(mutations.setLoggedIn);
 export const commitNewChat = commit(mutations.newChat);
 export const commitSetUsername = commit(mutations.setUsername);
+export const commitSetDateResponse = commit(mutations.setDateResponse);
+export const commitSetCompleteResponse = commit(mutations.setCompleteResponse);
+export const commitSetRateResponse = commit(mutations.setRateResponse);
 export const commitResetChat = commit(mutations.resetChat);
