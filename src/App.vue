@@ -1,21 +1,11 @@
 <template>
     <div id="app">
-        <TopBar
-                v-bind:showDropdown="loggedIn"
-                v-bind:userName="userName"
-        ></TopBar>
+        <TopBar></TopBar>
         <transition name="slideAwayLeft">
-            <LoginDialog
-                    v-show="!loggedIn"
-                    class="loginDialog floatingPanel"
-            ></LoginDialog>
+            <LoginDialog v-show="!loggedIn" class="loginDialog floatingPanel"></LoginDialog>
         </transition>
         <transition name="slideAwayRight">
-            <ChatPanel
-                    v-show="loggedIn" class="chatPanel floatingPanel"
-                    v-bind:messages="messages"
-                    v-bind:userName="userName"
-            ></ChatPanel>
+            <ChatPanel v-show="loggedIn" class="chatPanel floatingPanel"></ChatPanel>
         </transition>
     </div>
 </template>
@@ -36,12 +26,6 @@ export default Vue.extend({
     computed: {
         loggedIn() {
             return this.$store.state.loggedIn;
-        },
-        messages() {
-            return this.$store.state.messages;
-        },
-        userName() {
-            return this.$store.state.username;
         },
     },
 });
@@ -94,7 +78,7 @@ export default Vue.extend({
                 transform: translate(-50%, calc(-50% - 25px));
                 border-radius: 10px;
                 border: $socketChatDarkGreen solid 0.5px;
-                box-shadow: 0 0 3px 2px rgba($socketChatDarkGrey, 0.8);
+                box-shadow: $shadow;
                 background-color: white;
 
                 @media #{$mobile} {

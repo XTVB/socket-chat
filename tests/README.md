@@ -39,14 +39,6 @@ describe('testing some functionality on my component', () => {
   it('should behave in this way way under the provided conditions', () => {
     
     let store = new Vuex.Store({
-      modules: {
-        meeting: {
-          namespaced: meetingModule.namespaced,
-          getters: {
-            mockGetterOnTheModule: () => true,  
-          },
-        },  
-      },
     });
           
     const wrapper = shallowMount(ComponentToTest, {store, localVue});

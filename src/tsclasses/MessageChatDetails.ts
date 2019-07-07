@@ -1,5 +1,6 @@
 import BaseChatDetails from '@/tsclasses/BaseChatDetails';
 
+// Data for 'message' events between the client and the server
 export default class MessageChatDetails extends BaseChatDetails {
     public messageContent: string;
 

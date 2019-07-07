@@ -33,8 +33,9 @@ export default Vue.extend({
 
         .optionButton {
             margin: 0 auto 5px auto;
-            width: 70%;
+            width: 175px;
             display: block;
+            box-shadow: 0 0 1px 1px rgba($socketChatDarkGrey, 0.8);
             background-color: $socketChatLightBlue;
             box-sizing: border-box;
             border-radius: 20px;

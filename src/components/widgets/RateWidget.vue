@@ -31,6 +31,7 @@ export default Vue.extend({
             return optionsArray;
         },
         show() {
+            // Only show if response is in unset state
             return this.$store.state.rateResponse === -1;
         },
     },

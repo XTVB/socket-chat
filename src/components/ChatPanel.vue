@@ -11,8 +11,7 @@
             </transition-group>
         </div>
         <div class="chatInputContainer">
-            <input v-model="messageInput"
-                   @keyup.enter="sendMessage"
+            <input v-model="messageInput" @keyup.enter="sendMessage"
                    type="text" class="messageEntry">
             <div @click="sendMessage" class="chatSendButton">
                 <span> Send</span>
@@ -34,14 +33,18 @@ export default Vue.extend({
     components: {
         ChatMessage,
     },
-    props: {
-        messages: Array,
-        userName: String,
-    },
     data() {
       return {
           messageInput: '',
       };
+    },
+    computed: {
+        userName() {
+            return this.$store.state.username;
+        },
+        messages() {
+            return this.$store.state.messages;
+        },
     },
     methods: {
         messageAdded() {

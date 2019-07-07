@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import * as Vuex from 'vuex';
-import vm from '@/main';
 import {getStoreAccessors} from 'vuex-typescript';
 import BaseChatDetails from '@/tsclasses/BaseChatDetails';
 import MessageChatDetails from '@/tsclasses/MessageChatDetails';
@@ -29,10 +28,8 @@ Vue.use(Vuex);
 
 const storeOptions = {
     state: {
-        // TODO init as false
-        loggedIn: true,
-        // TODO init as ''
-        username: 'test',
+        loggedIn: false,
+        username: '',
         messages: Array<BaseChatDetails>(),
         dateResponse: null,
         mapResponse: null,
@@ -58,7 +55,11 @@ const storeOptions = {
         setRateResponse(state: State, value: number) {
             state.rateResponse = value;
         },
+        setMapResponse(state: State, value: LatLang) {
+            state.mapResponse = value;
+        },
         resetChat(state: State) {
+            // Empty list of messages and reset whether we've received any of the command event types
             state.messages = [];
             state.dateResponse = null;
             state.mapResponse = null;
@@ -68,6 +69,8 @@ const storeOptions = {
     },
     actions: {
         socket_connect(context: Context) {
+            // TODO future development, keep track of connected state and only attempt to emit events if connected
+            // showing message to user if not connected
             console.log('socket connected');
         },
         socket_message(context: Context, messageSocketEvent: MessageSocketEvent) {
@@ -81,7 +84,8 @@ const storeOptions = {
             switch (commandSocketEvent.command.type) {
                 case CommandEventType.DATE:
                     if (context.state.dateResponse === null) {
-                        context.state.dateResponse = '';
+                        // Set response to unset state so we don't show the widget again but know to show the options
+                        commitSetDateResponse(context, '');
                         commitNewChat(context, newChat);
                     } else {
                         console.log('Command type already received');
@@ -89,7 +93,9 @@ const storeOptions = {
                     break;
                 case CommandEventType.MAP:
                     if (context.state.mapResponse === null) {
-                        context.state.mapResponse = (commandSocketEvent.command.data as LatLang);
+                        // Set response so we don't show the widget again. Map command doesn't need responding to from
+                        // the user as it doesn't have options
+                        commitSetMapResponse(context, (commandSocketEvent.command.data as LatLang));
                         commitNewChat(context, newChat);
                     } else {
                         console.log('Command type already received');
@@ -97,7 +103,8 @@ const storeOptions = {
                     break;
                 case CommandEventType.RATE:
                     if (context.state.rateResponse === null) {
-                        context.state.rateResponse = -1;
+                        // Set response to unset state so we don't show the widget again but know to show the options
+                        commitSetRateResponse(context, -1);
                         commitNewChat(context, newChat);
                     } else {
                         console.log('Command type already received');
@@ -105,7 +112,8 @@ const storeOptions = {
                     break;
                 case CommandEventType.COMPLETE:
                     if (context.state.completeResponse === null) {
-                        context.state.completeResponse = '';
+                        // Set response to unset state so we don't show the widget again but know to show the options
+                        commitSetCompleteResponse(context, '');
                         commitNewChat(context, newChat);
                     } else {
                         console.log('Command type already received');
@@ -115,15 +123,18 @@ const storeOptions = {
 
         },
         send_event(context: Context, event: BaseChatDetails): void {
-            const socket = vm.$socket;
+            // $socket is the socket.io connection which is part of our Vue object, need to use Vue.prototype to access
+            // it from the store
+            const socket = Vue.prototype.$socket;
             if (event instanceof CommandChatDetails) {
                 socket.emit('command');
             } else {
                 commitNewChat(context, event);
-                socket.emit('message', {
+                const messageEvent: MessageSocketEvent = {
                     author: context.state.username,
                     message: (event as MessageChatDetails).messageContent,
-                });
+                };
+                socket.emit('message', messageEvent);
             }
 
         },
@@ -176,9 +187,7 @@ const {commit, read, dispatch} =
     getStoreAccessors<State, State>('');
 
 
-export const defaultState = storeOptions.state;
-
-export const actions = storeOptions.actions;
+const actions = storeOptions.actions;
 
 export const dispatchAttemptLogin = dispatch(actions.attempt_login);
 export const dispatchSendEvent = dispatch(actions.send_event);
@@ -186,7 +195,7 @@ export const dispatchSetDateResponse = dispatch(actions.set_date_response);
 export const dispatchSetCompleteResponse = dispatch(actions.set_complete_response);
 export const dispatchSetRateResponse = dispatch(actions.set_rate_response);
 
-export const mutations = storeOptions.mutations;
+const mutations = storeOptions.mutations;
 
 export const commitSetLogin = commit(mutations.setLoggedIn);
 export const commitNewChat = commit(mutations.newChat);
@@ -194,4 +203,5 @@ export const commitSetUsername = commit(mutations.setUsername);
 export const commitSetDateResponse = commit(mutations.setDateResponse);
 export const commitSetCompleteResponse = commit(mutations.setCompleteResponse);
 export const commitSetRateResponse = commit(mutations.setRateResponse);
+export const commitSetMapResponse = commit(mutations.setMapResponse);
 export const commitResetChat = commit(mutations.resetChat);

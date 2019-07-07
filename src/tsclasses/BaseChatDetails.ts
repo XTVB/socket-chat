@@ -1,5 +1,6 @@
 import uuidv4 from 'uuid/v4';
 
+// Structure of message objects given to the ChatPanel to render
 export default class BaseChatDetails {
     public uuid: string;
     public author: string;

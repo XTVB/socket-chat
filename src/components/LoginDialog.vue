@@ -30,6 +30,7 @@ export default Vue.extend({
     },
     methods: {
         attemptLogin(event: Event) {
+            // Prevent default to stop form submit from reloading the page
             event.preventDefault();
             dispatchAttemptLogin(this.$store, {
                 username: this.userInput,

@@ -46,6 +46,7 @@ export default Vue.extend({
             return dateOptionsArray;
         },
         show() {
+            // Only show if response is in unset state
             return this.$store.state.dateResponse === '';
         },
     },

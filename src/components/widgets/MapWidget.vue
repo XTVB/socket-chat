@@ -7,6 +7,7 @@
 
 
 <script lang="ts">
+// Needed to allow typings for google maps
 import {} from 'googlemaps';
 import Vue from 'vue';
 import {LatLang} from '@/tsclasses/SocketChat';

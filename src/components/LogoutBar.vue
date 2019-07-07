@@ -2,7 +2,7 @@
     <div class="logoutBar">
         <div>
             <div @click="logout" class="logoutButton">
-                <img title="Log Out" class="x-icon" src="../assets/images/x-icon.png">
+                <img alt="Log Out" title="Log Out" class="x-icon" src="../assets/images/x-icon.png">
             </div>
             <div class="userName">
                 {{userName}}
@@ -18,8 +18,10 @@ import {commitSetLogin} from '@/store';
 
 export default Vue.extend({
     name: 'LogoutBar',
-    props: {
-        userName: String,
+    computed: {
+        userName() {
+            return this.$store.state.username;
+        },
     },
     methods: {
         logout() {

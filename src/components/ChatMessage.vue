@@ -2,7 +2,7 @@
     <div class="chatMessageContainer" :class="message.isLocal ? 'isLocal' : 'isExternal'">
         <div class="chatMessage">
             <div class="messageDetails">
-                {{message.author}} : {{message.sentTime}}
+                <span class="messageAuthor" >{{message.author}} : </span><span class="messageSentTime">{{message.sentTime}}</span>
             </div>
             <div v-if="isCommand(message)">
                 <component v-bind:is="commandType"
@@ -79,7 +79,12 @@ export default Vue.extend({
             display: inline-block;
 
             .messageDetails {
-                margin-bottom: 5px;
+                margin-bottom: 10px;
+                font-size: 18px;
+
+                .messageAuthor {
+                    font-weight: bold;
+                }
             }
 
             .messageContent {

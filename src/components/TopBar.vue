@@ -1,9 +1,7 @@
 <template>
     <div id="topBar">
         <img alt="Vue logo" src="../assets/images/logo.png">
-        <LogoutBar v-show="showDropdown" class="farRight"
-                        v-bind:userName="userName"
-        ></LogoutBar>
+        <LogoutBar v-show="loggedIn" class="farRight"></LogoutBar>
     </div>
 </template>
 
@@ -17,9 +15,10 @@
         components: {
             LogoutBar,
         },
-        props: {
-            showDropdown: Boolean,
-            userName: String,
+        computed: {
+            loggedIn() {
+                return this.$store.state.loggedIn;
+            },
         },
     });
 
@@ -36,7 +35,7 @@
         height: 50px;
         border-bottom: 0.5px solid $socketChatDarkGreen;
         background-color: white;
-        box-shadow: 0 0 3px 2px rgba($socketChatDarkGrey, 0.8);
+        box-shadow: $shadow;
 
         img {
             height: 40px;

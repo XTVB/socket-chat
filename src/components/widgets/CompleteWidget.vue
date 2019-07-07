@@ -22,6 +22,7 @@ export default Vue.extend({
     },
     computed: {
         show() {
+            // Only show if response is in unset state
             return this.$store.state.completeResponse === '';
         },
     },
