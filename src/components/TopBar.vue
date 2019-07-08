@@ -29,6 +29,8 @@
     @import "../assets/scss/vars";
 
     #topBar {
+        // Make sure topBar has highest z-index so that border bottom shows even in mobile view where the panels reach
+        // the top bar
         z-index: 1;
         position: relative;
         width: 100%;
@@ -38,6 +40,7 @@
         box-shadow: $shadow;
 
         img {
+            // Make the image centered while taking up the full height
             height: 40px;
             padding: 5px;
         }

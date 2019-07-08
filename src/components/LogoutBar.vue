@@ -61,7 +61,7 @@ export default Vue.extend({
                 background-color: $socketChatDarkBlue;
 
                 &:hover {
-                    background-color: $socketChatDarkGreen;
+                    background-color: $socketChatLightBlue;
                 }
             }
 
